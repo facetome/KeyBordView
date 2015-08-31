@@ -56,6 +56,10 @@ public class CellView {
          mPressState = isPressed;
     }
 
+    public boolean getPressState(){
+        return mPressState;
+    }
+
     public void drawToCanvas(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(Color.GRAY);
@@ -175,15 +179,16 @@ public class CellView {
         double radius = Math.sqrt(Math.pow(x - mOriginX, 2) + Math.pow(y - mOriginY, 2));
         int direction = 1001;
         if (radius < 4 * mTemp && radius > mTemp) {
-            double angle = Math.toDegrees(Math.atan(y / x));
-
-            if (angle > 315 || angle <= 45) {
+            double angle = Math.toDegrees(Math.atan2((y - mOriginY) , (x-mOriginX)));
+            //math.atan2没有弄懂
+            Log.d("wangliangsen", angle + "");
+            if (angle > -45 && angle <= 45) {
                 direction = RIGHT_LOCATION;
             } else if (angle > 45 && angle <= 135) {
                 direction = BUTTOM_LOCATION;
-            } else if (angle > 135 && angle <= 225) {
+            } else if ((angle > 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
                 direction = LEFT_LOCATION;
-            } else if(angle > 225 && angle <= 315){
+            } else if(angle > -135 && angle <= -45){
                 direction = TOP_LOCATION;
             }
 

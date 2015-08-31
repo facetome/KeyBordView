@@ -19,7 +19,8 @@ public class KeyBoardView extends View {
     private int mViewHeight;
     private CellView[] mCellGroup = new CellView[5];
     private int mTemp;
-    private String[] mContent = new String[]{"北","西","东","南","中"};
+    private String[] mContent = new String[]{"北", "西", "东", "南", "中"};
+    private OnClickListener mListener;
 
 
     public KeyBoardView(Context context) {
@@ -65,7 +66,7 @@ public class KeyBoardView extends View {
         int buttom = top + mTemp;
 
         for (int i = 0; i < mCellGroup.length; i++) {
-            mCellGroup[i] = new CellView(left, top, right, buttom, mViewWidth /2, mViewHeight /
+            mCellGroup[i] = new CellView(left, top, right, buttom, mViewWidth / 2, mViewHeight /
                     2, mTemp / 4);
             mCellGroup[i].setLocation(i);
             mCellGroup[i].setText(mContent[i]);
@@ -74,9 +75,9 @@ public class KeyBoardView extends View {
     }
 
     private void drawCellGroup(Canvas canvas) {
-       for (int i =0; i<mCellGroup.length; i++){
-           mCellGroup[i].drawToCanvas(canvas);
-       }
+        for (int i = 0; i < mCellGroup.length; i++) {
+            mCellGroup[i].drawToCanvas(canvas);
+        }
     }
 
     @Override
@@ -86,7 +87,7 @@ public class KeyBoardView extends View {
         float y = event.getY();
 
         boolean isNeedDraw = true;
-        switch (action){
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 isNeedDraw = true;
                 break;
@@ -100,15 +101,25 @@ public class KeyBoardView extends View {
                 break;
         }
 
-        for (int i =0;i< mCellGroup.length;i++){
-            if(isNeedDraw){
-                 mCellGroup[i].checkBounds(x, y);
-            } else {
-             //   mCellGroup[i].setPressState(false);
+        for (int i = 0; i < mCellGroup.length; i++) {
+            if (isNeedDraw) {
+                mCellGroup[i].checkBounds(x, y);
+                if (mCellGroup[i].getPressState()) {
+                    if (mListener != null) {
+                        mListener.onClick(i);
+                    }
+                }
             }
         }
         invalidate();
+        return true;
+    }
 
-       return true;
+    public void setOnClickListener(OnClickListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnClickListener {
+        void onClick(int witch);
     }
 }
