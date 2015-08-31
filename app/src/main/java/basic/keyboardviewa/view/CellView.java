@@ -59,7 +59,6 @@ public class CellView {
     public void drawToCanvas(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(Color.GRAY);
-        paint.setAlpha(90);
         paint.setAntiAlias(true);
         paint.setStyle(Style.FILL);
 
@@ -159,6 +158,9 @@ public class CellView {
     private void drawCircle(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
+        if(mPressState){
+            paint.setColor(Color.YELLOW);
+        }
         paint.setAntiAlias(true);
         canvas.drawCircle(mOriginX, mOriginY, mTemp, paint);
     }
@@ -170,23 +172,29 @@ public class CellView {
     //判断一点十是否在一个扇形中
     public void checkBounds(float x, float y) {
         //首先判断是否在大圆之中 ,小圆之外
-        double radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-        int direction;
+        double radius = Math.sqrt(Math.pow(x - mOriginX, 2) + Math.pow(y - mOriginY, 2));
+        int direction = 1001;
         if (radius < 4 * mTemp && radius > mTemp) {
-           double slope = Math.tan(y / x);
-            if(slope <= 1 && slope > -1 && x > mOriginX){
-                 //在东
+            double angle = Math.toDegrees(Math.atan(y / x));
+
+            if (angle > 315 || angle <= 45) {
                 direction = RIGHT_LOCATION;
-            } else if(slope >= -1 && slope < 1 && y< mOriginY){
-                   //在南
+            } else if (angle > 45 && angle <= 135) {
                 direction = BUTTOM_LOCATION;
-            }
-            else if(slope <=1 && slope > -1 && x< mOriginX){
-                 //在西
+            } else if (angle > 135 && angle <= 225) {
                 direction = LEFT_LOCATION;
-            }else {
-                //在北
+            } else if(angle > 225 && angle <= 315){
+                direction = TOP_LOCATION;
             }
+
+        } else if (radius >= 0 && radius <= mTemp) {
+            direction = CENTER_LOCATION;
+        }
+        boolean isChecked = direction == mLocation ? true : false;
+        if (isChecked) {
+            mPressState = true;
+        } else {
+            mPressState = false;
         }
     }
 

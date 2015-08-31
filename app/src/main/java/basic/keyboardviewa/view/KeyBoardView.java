@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -78,4 +79,36 @@ public class KeyBoardView extends View {
        }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getActionMasked();
+        float x = event.getX();
+        float y = event.getY();
+
+        boolean isNeedDraw = true;
+        switch (action){
+            case MotionEvent.ACTION_DOWN:
+                isNeedDraw = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                isNeedDraw = false;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                isNeedDraw = false;
+                break;
+            default:
+                break;
+        }
+
+        for (int i =0;i< mCellGroup.length;i++){
+            if(isNeedDraw){
+                 mCellGroup[i].checkBounds(x, y);
+            } else {
+             //   mCellGroup[i].setPressState(false);
+            }
+        }
+        invalidate();
+
+       return true;
+    }
 }
