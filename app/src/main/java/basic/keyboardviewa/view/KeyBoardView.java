@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,8 +16,9 @@ public class KeyBoardView extends View {
     private boolean mIsInitView = false;
     private int mViewWidth;
     private int mViewHeight;
-    private CellView[] mCellGroup = new CellView[4];
+    private CellView[] mCellGroup = new CellView[5];
     private int mTemp;
+    private String[] mContent = new String[]{"北","西","东","南","中"};
 
 
     public KeyBoardView(Context context) {
@@ -38,10 +40,6 @@ public class KeyBoardView extends View {
             initView();
         }
         drawCellGroup(canvas);
-        drawCircle(canvas);
-
-
-
     }
 
     private void initView() {
@@ -69,7 +67,7 @@ public class KeyBoardView extends View {
             mCellGroup[i] = new CellView(left, top, right, buttom, mViewWidth /2, mViewHeight /
                     2, mTemp / 4);
             mCellGroup[i].setLocation(i);
-            mCellGroup[i].setText(i + "a");
+            mCellGroup[i].setText(mContent[i]);
         }
 
     }
@@ -78,14 +76,6 @@ public class KeyBoardView extends View {
        for (int i =0; i<mCellGroup.length; i++){
            mCellGroup[i].drawToCanvas(canvas);
        }
-    }
-
-    private void drawCircle(Canvas canvas){
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setAntiAlias(true);
-        canvas.drawCircle(mViewWidth / 2, mViewHeight / 2, mTemp/ 4, paint);
-
     }
 
 }
