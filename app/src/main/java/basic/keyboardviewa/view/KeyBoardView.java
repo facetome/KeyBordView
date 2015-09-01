@@ -2,9 +2,6 @@ package basic.keyboardviewa.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -87,15 +84,19 @@ public class KeyBoardView extends View {
         float y = event.getY();
 
         boolean isNeedDraw = true;
+        boolean isPressedUp = false;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 isNeedDraw = true;
+                isPressedUp = false;
                 break;
             case MotionEvent.ACTION_UP:
                 isNeedDraw = false;
+                isPressedUp = true;
                 break;
             case MotionEvent.ACTION_MOVE:
                 isNeedDraw = false;
+                isPressedUp = false;
                 break;
             default:
                 break;
@@ -104,6 +105,10 @@ public class KeyBoardView extends View {
         for (int i = 0; i < mCellGroup.length; i++) {
             if (isNeedDraw) {
                 mCellGroup[i].checkBounds(x, y);
+            }
+        }
+        for (int i = 0; i < mCellGroup.length; i++) {
+            if (isPressedUp) {
                 if (mCellGroup[i].getPressState()) {
                     if (mListener != null) {
                         mListener.onClick(i);
@@ -111,6 +116,7 @@ public class KeyBoardView extends View {
                 }
             }
         }
+
         invalidate();
         return true;
     }
