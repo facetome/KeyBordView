@@ -31,6 +31,7 @@ public class MainActivity extends FragmentActivity{
                     public void onClick(int witch) {
                         Toast.makeText(getApplicationContext(), "witch" + witch, Toast
                                 .LENGTH_SHORT).show();
+								//
                     }
                 });
             }
